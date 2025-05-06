@@ -10,7 +10,6 @@ import SwiftData
 
 
 /* Each habit will be created according to the selected category, i.e. each HabitCategory will consist of subgroups of habits. */
-
 @Model
 class HabitCategory {
     
@@ -43,6 +42,7 @@ class Habit{
     var moreInfo: String
     var startDate: Date
     var endDate: Date
+    var interval: HabitInterval // default set to oncePerWeek
     var completedDates: [Date]? = []
     var streak: Int
     var isHabitDone: Bool = false
@@ -50,7 +50,9 @@ class Habit{
    // @Relationship
     var category: HabitCategory
     
-    init(id: UUID, name: String, moreInfo: String, startDate: Date = Date(), endDate: Date = Date(), completedDates: [Date] = [], streak: Int, isHabitDone: Bool, category: HabitCategory ) {
+    init(id: UUID, name: String, moreInfo: String, startDate: Date = Date(), endDate: Date = Date(), interval: HabitInterval, completedDates: [Date] = [], streak: Int, isHabitDone: Bool, category: HabitCategory ) {
+        
+        self.interval = interval
         self.id = id
         self.name = name
         self.moreInfo = moreInfo
@@ -66,9 +68,9 @@ class Habit{
     
 }
 
-enum Category: CaseIterable, Codable {
+enum Category: CaseIterable, Codable, Hashable {
     case health, productivity, relationship, sleep
-    case finance, Home, leraning, creativity
+    case finance, Home, leraning, creativity, noCategory
     
     //TODO REMOVE AFTER CHECK - osäker om SwiftData accpeterar computed property?
     var categoryName: String {
@@ -89,6 +91,27 @@ enum Category: CaseIterable, Codable {
             return "Utbildning"
         case .creativity:
             return "Skapade"
+        case .noCategory:
+            return "Ingen kategori"
+        }
+    }
+}
+
+enum HabitInterval: CaseIterable, Hashable, Codable {
+    case oncePerDay, everyOtherDay, oncePerWeek, oncePerMonth, oncePerYear
+    
+    var intervalName: String {
+        switch self{
+        case .oncePerDay:
+            return "en gång per dag"
+        case .oncePerWeek:
+            return "en gång i veckan"
+        case .everyOtherDay:
+            return "varannan dag"
+        case .oncePerMonth:
+            return "en gång i månaden"
+        case .oncePerYear:
+            return "en gång per år"
         }
     }
 }
@@ -100,14 +123,14 @@ enum Category: CaseIterable, Codable {
 extension HabitCategory {
     //TODO fix icons and colors!!
     static let initCategory: [HabitCategory] = [
-        HabitCategory(category: .health, icon: "", color: ""),
-        HabitCategory(category: .productivity, icon: "", color: ""),
-        HabitCategory(category: .relationship, icon: "", color: ""),
-        HabitCategory(category: .sleep, icon: "", color: ""),
-        HabitCategory(category: .finance, icon: "", color: ""),
-        HabitCategory(category: .Home, icon: "", color: ""),
-        HabitCategory(category: .leraning, icon: "", color: ""),
-        HabitCategory(category: .creativity, icon: "", color: "")
+        HabitCategory(category: .health, icon: "heart.fill", color: ""),
+        HabitCategory(category: .productivity, icon: "checkmark.circle.fill", color: ""),
+        HabitCategory(category: .relationship, icon: "person.2.fill", color: ""),
+        HabitCategory(category: .sleep, icon: "bed.double.fill", color: ""),
+        HabitCategory(category: .finance, icon: "banknote.fill", color: ""),
+        HabitCategory(category: .Home, icon: "house.fill", color: ""),
+        HabitCategory(category: .leraning, icon: "book.fill", color: ""),
+        HabitCategory(category: .creativity, icon: "paintpalette.fill", color: "")
         
     ]
 }

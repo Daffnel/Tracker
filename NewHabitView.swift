@@ -13,7 +13,8 @@ struct NewHabitView: View {
     @State private var moreInfo: String = ""
     @State  private var startDate: Date = Date()
     @State private  var endDate: Date = Date()
-    @State private  var category: Category = .Home
+    @State private  var category: Category = .noCategory
+    @State private var interval: HabitInterval = .oncePerWeek
     
     var body: some View {
         NavigationStack{
@@ -21,22 +22,42 @@ struct NewHabitView: View {
                 Form{
                     Section(header: Text("Vad vill du göra?")){
                         TextField("ex. prommenera 15 minuter om dagen", text: $name)
+                        Picker("kategori", selection:  $category){
+                            ForEach(Category.allCases, id: \.self){category in
+                                Text(category.categoryName).tag(category)
+                            }
+                            
+                        }
                     }
                     Section(header: Text("Beskrivning")){
-                        TextField("Gå stora rundan med hunden 2 gånger om dagen", text: $moreInfo, axis: .vertical)
+                        TextField("ex. gå stora rundan med hunden 2 gånger om dagen", text: $moreInfo, axis: .vertical)
                     }
                     Section(header: Text("Start och slutdatum")){
-                        DatePicker(selection: $startDate)
-                        // more code to come start, end date
+                        DatePicker(selection: $startDate){
+                            Text("Startdatum")
+                           // Text("Ange ett datum för start")
+                        }
+                        DatePicker(selection: $endDate){
+                            Text("Slutdatum")
+                        }
+                       
+                            Picker("Upprepas", selection: $interval){
+                                ForEach(HabitInterval.allCases, id:\.self){interval in
+                                    
+                                    Text(interval.intervalName).tag(interval)
+                                }
+                            }
+                        
                     }
                 }
             }
             .navigationTitle("Lägg till en aktivitet")
+            
         }
         .padding()
     }
 }
 
 #Preview {
-  //  NewHabitView()
+   NewHabitView()
 }
