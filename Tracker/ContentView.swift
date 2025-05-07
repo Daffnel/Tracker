@@ -5,26 +5,35 @@
 //  Created by Daniel A on 2025-05-05.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct ContentView: View {
-    @Environment(\.modelContext) private var modelContext
-    @Query var habits: [Habit]
+    
 
-        var body: some View {
-            List(habits) { habit in
-                VStack(alignment: .leading) {
-                    Text(habit.name)
-                        .font(.headline)
-                    Text(habit.moreInfo)
-                        .font(.subheadline)
-                        .foregroundColor(.gray)
-                    Text("Test")
+    var body: some View {
+        TabView{
+            HomeScreen()
+                .tabItem {
+                    Label("Hem", systemImage: "house")
                 }
-            }
-            .navigationTitle("Alla vanor")
+            NewHabitView()
+                .tabItem {
+                    Label("Lägg till aktivitet", systemImage: "plus")
+                }
+            
+            HabitsView()
+                .tabItem {
+                    Label("aktiviteter", systemImage: "list.bullet")
+                }
+            SettingsView()
+                .tabItem {
+                    Label("Inställningar", systemImage: "gear")
+                }
+            
         }
+    }
+
 }
 
 #Preview {

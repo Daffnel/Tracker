@@ -15,8 +15,8 @@ struct TrackerApp: App {
     
     var body: some Scene {
         WindowGroup {
-          //ContentView()
-            NewHabitView()
+          ContentView()
+          //  NewHabitView()
             .modelContainer(for: Habit.self) /*{habit in
                     
                     switch habit {

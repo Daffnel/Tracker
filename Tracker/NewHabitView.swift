@@ -18,6 +18,8 @@ struct NewHabitView: View {
     @State private  var category: Category = .noCategory
     @State private var interval: HabitInterval = .oncePerWeek
     
+    
+    
     var isFormValid: Bool {
             !name.trimmingCharacters(in: .whitespaces).isEmpty &&
         !moreInfo.trimmingCharacters(in: .whitespaces).isEmpty &&
@@ -35,7 +37,8 @@ struct NewHabitView: View {
                                 Text(category.categoryName).tag(category)
                                 Image(systemName: category.categoryIcon)
                             }
-                            }
+                        }
+                        .padding(8)
                         
                     }
                 }
@@ -44,11 +47,13 @@ struct NewHabitView: View {
                         .lineLimit(3...6)
                 }
                 Section(header: Text("Start och slutdatum")){
-                    DatePicker(selection: $startDate){
+                    DatePicker(selection: $startDate, displayedComponents: .date){
                         Text("Startdatum")
                         // Text("Ange ett datum för start")
                     }
-                    DatePicker(selection: $endDate){
+                
+                    
+                    DatePicker(selection: $endDate, displayedComponents: .date){
                         Text("Slutdatum")
                     }
                     
@@ -68,7 +73,9 @@ struct NewHabitView: View {
                 }
                 
             }
-                .navigationTitle("Lägg till en aktivitet")
+                
+            .navigationTitle("Lägg till en aktivitet") // lägger text separat
+            
             }
             
             
