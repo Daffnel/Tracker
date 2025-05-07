@@ -6,17 +6,25 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct ContentView: View {
-    var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+    @Environment(\.modelContext) private var modelContext
+    @Query var habits: [Habit]
+
+        var body: some View {
+            List(habits) { habit in
+                VStack(alignment: .leading) {
+                    Text(habit.name)
+                        .font(.headline)
+                    Text(habit.moreInfo)
+                        .font(.subheadline)
+                        .foregroundColor(.gray)
+                    Text("Test")
+                }
+            }
+            .navigationTitle("Alla vanor")
         }
-        .padding()
-    }
 }
 
 #Preview {

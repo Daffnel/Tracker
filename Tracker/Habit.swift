@@ -10,13 +10,13 @@ import SwiftData
 
 
 /* Each habit will be created according to the selected category, i.e. each HabitCategory will consist of subgroups of habits. */
-@Model
+ /* @Model
 class HabitCategory {
     
    // var name: String
-    var category: Category
-    var icon: String
-    var  color: String
+    var category: Category 
+    var icon: String = ""
+    var  color: String = ""
     
     @Relationship(deleteRule: .cascade, inverse: \Habit.category)
     var habits: [Habit] = []
@@ -30,10 +30,10 @@ class HabitCategory {
         self.icon = icon
         self.color = color
     }
-}
+} */
 
 @Model
-class Habit{
+class Habit: Identifiable{
     
     @Attribute(.unique)
     var id: UUID = UUID()
@@ -42,15 +42,16 @@ class Habit{
     var moreInfo: String
     var startDate: Date
     var endDate: Date
-    var interval: HabitInterval // default set to oncePerWeek
+    var interval: HabitInterval
     var completedDates: [Date]? = []
     var streak: Int
     var isHabitDone: Bool = false
+    var category: Category
     
    // @Relationship
-    var category: HabitCategory
+  //  var category: HabitCategory
     
-    init(id: UUID, name: String, moreInfo: String, startDate: Date = Date(), endDate: Date = Date(), interval: HabitInterval, completedDates: [Date] = [], streak: Int, isHabitDone: Bool, category: HabitCategory ) {
+    init(id: UUID, name: String, moreInfo: String, startDate: Date = Date(), endDate: Date = Date(), interval: HabitInterval, completedDates: [Date] = [], streak: Int, isHabitDone: Bool, category: Category ) {
         
         self.interval = interval
         self.id = id
@@ -95,6 +96,31 @@ enum Category: CaseIterable, Codable, Hashable {
             return "Ingen kategori"
         }
     }
+    
+    var categoryIcon: String {
+        switch self {
+        case .Home:
+            return "house.fill"
+        case .health:
+          return  "heart.fill"
+        case .productivity:
+           return "checkmark.circle.fill"
+        case .relationship:
+          return  "person.2.fill"
+        case .sleep:
+           return "bed.double.fill"
+        case .finance:
+            return "banknote.fill"
+        case .leraning:
+            return "book.fill"
+        case .creativity:
+          return  "paintpalette.fill"
+        case .noCategory:
+            return ""
+        }
+    }
+    
+    //TODO add category icons and color
 }
 
 enum HabitInterval: CaseIterable, Hashable, Codable {
@@ -120,7 +146,7 @@ enum HabitInterval: CaseIterable, Hashable, Codable {
 // Tilldelas även olika färger beroende på kategorier
 // Logik --> TrackerApp.swift
 
-extension HabitCategory {
+/*extension HabitCategory {
     //TODO fix icons and colors!!
     static let initCategory: [HabitCategory] = [
         HabitCategory(category: .health, icon: "heart.fill", color: ""),
@@ -133,4 +159,4 @@ extension HabitCategory {
         HabitCategory(category: .creativity, icon: "paintpalette.fill", color: "")
         
     ]
-}
+}*/

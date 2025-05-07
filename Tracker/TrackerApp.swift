@@ -15,9 +15,9 @@ struct TrackerApp: App {
     
     var body: some Scene {
         WindowGroup {
-            // TODO change ContentView()
+          //ContentView()
             NewHabitView()
-            .modelContainer(for: Habit.self){habit in
+            .modelContainer(for: Habit.self) /*{habit in
                     
                     switch habit {
                     case .success(let container):
@@ -32,7 +32,7 @@ struct TrackerApp: App {
                         print(error.localizedDescription)
                     }
                     
-                }
+                }*/
             
         }
     }

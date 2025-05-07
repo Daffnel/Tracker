@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct NewHabitView: View {
     @Environment(\.modelContext) var modelContext
@@ -30,8 +31,11 @@ struct NewHabitView: View {
                     TextField("ex. prommenera 15 minuter om dagen", text: $name)
                     Picker("kategori", selection:  $category){
                         ForEach(Category.allCases, id: \.self){category in
-                            Text(category.categoryName).tag(category)
-                        }
+                            HStack{
+                                Text(category.categoryName).tag(category)
+                                Image(systemName: category.categoryIcon)
+                            }
+                            }
                         
                     }
                 }
@@ -50,14 +54,14 @@ struct NewHabitView: View {
                     
                     Picker("Upprepas", selection: $interval){
                         ForEach(HabitInterval.allCases, id:\.self){interval in
-                            
                             Text(interval.intervalName).tag(interval)
                         }
                     }
                 }
                 Section(){
                     Button("Spara"){
-                        // Add save functions
+                        saveHabit()
+                        print("save button pressed")
                     }
                     .disabled(!isFormValid)
                     .buttonStyle(.borderedProminent)
@@ -71,6 +75,9 @@ struct NewHabitView: View {
         }
     
     func saveHabit(){
+        let habit = Habit(id: UUID(), name: name, moreInfo: moreInfo, interval: interval, streak: 0, isHabitDone: false, category: category)
+        
+        modelContext.insert(habit)
         
     }
         
