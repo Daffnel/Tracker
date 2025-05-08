@@ -56,6 +56,14 @@ class Habit: Identifiable {
         self.isHabitDone = isHabitDone
         self.category = category
     }
+    
+    func updateIsHabitDone() {
+        if datesInterVal.count == (completedDates?.count ?? 0) {
+            isHabitDone = true
+        } else {
+            isHabitDone = false
+        }
+    }
 
 }
 

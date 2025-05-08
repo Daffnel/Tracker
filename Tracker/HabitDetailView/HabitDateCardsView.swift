@@ -39,6 +39,8 @@ struct HabitDateCardsView: View {
                                 }
 
                                 habit.completedDates = updatedDates
+                                habit.updateIsHabitDone()
+                                print(habit.isHabitDone)
                             }
                         )
 

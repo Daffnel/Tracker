@@ -67,6 +67,7 @@ struct NewHabitView: View {
                 Section {
                     Button("Spara") {
                         saveHabit()
+                    
                         
                         
                         print("save button pressed")
