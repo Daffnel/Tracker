@@ -6,10 +6,47 @@
 //
 
 import SwiftUI
+import SwiftData
+
 
 struct HabitsView: View {
+    
+    @Environment(\.modelContext) var modelContext
+    @Query(sort: [
+        SortDescriptor(\Habit.startDate, order: .reverse),
+        SortDescriptor(\Habit.name),
+    ]) var habits: [Habit]
+
+    
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        NavigationStack{
+            List {
+                ForEach(habits) { habit in
+                    NavigationLink(value: habit) {
+                        VStack(alignment: .leading) {
+                            Text(habit.name)
+                                .font(.headline)
+                            Text(habit.moreInfo)
+                            
+                            
+                            
+                        }
+                    }
+                }
+                .onDelete(perform: deleteDestinations)
+            }
+            .navigationDestination(for: Habit.self) {habit in
+                HabitInfoView(habit: habit)
+            }
+            .navigationTitle("Lista med all vanor")
+        }
+    }
+    func deleteDestinations(_ indexSet: IndexSet) {
+        for index in indexSet {
+            let habit = habits[index]
+            modelContext.delete(habit)
+        }
     }
 }
 

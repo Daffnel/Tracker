@@ -22,6 +22,7 @@ class Habit: Identifiable {
     var endDate: Date
     var interval: HabitInterval
     var completedDates: [Date]? = []
+    var datesInterVal: [Date]
     var streak: Int
     var isHabitDone: Bool = false
     var category: Category
@@ -30,16 +31,17 @@ class Habit: Identifiable {
     //  var category: HabitCategory
 
     init(
-        id: UUID,
-        name: String,
-        moreInfo: String,
+        id: UUID = UUID(),
+        name: String ,
+        moreInfo: String ,
         startDate: Date = Date(),
         endDate: Date = Date(),
         interval: HabitInterval,
         completedDates: [Date] = [],
-        streak: Int,
-        isHabitDone: Bool,
-        category: Category
+        datesInterval: [Date] = [],
+        streak: Int = 0,
+        isHabitDone: Bool = false,
+        category: Category = .noCategory
     ) {
 
         self.interval = interval
@@ -48,6 +50,7 @@ class Habit: Identifiable {
         self.moreInfo = moreInfo
         self.startDate = startDate
         self.endDate = endDate
+        self.datesInterVal = datesInterval
         self.completedDates = completedDates
         self.streak = streak
         self.isHabitDone = isHabitDone

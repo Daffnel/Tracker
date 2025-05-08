@@ -10,6 +10,7 @@ import SwiftUI
 
 struct ContentView: View {
     
+    let habit = Habit(name: "", moreInfo: "", interval: .everyOtherDay)
 
     var body: some View {
         TabView{
@@ -17,10 +18,10 @@ struct ContentView: View {
                 .tabItem {
                     Label("Hem", systemImage: "house")
                 }
-            NewHabitView()
+            NewHabitView(habit: habit)
                 .tabItem {
-                    Label("Lägg till aktivitet", systemImage: "plus")
-                }
+                  Label("Lägg till aktivitet", systemImage: "plus")
+              }
             
             HabitsView()
                 .tabItem {
