@@ -9,11 +9,16 @@ import SwiftUI
 
 struct HabitInfoView: View {
     
-    var habit: Habit
+    @Environment(\.modelContext) var modelContext
+    
+    @Bindable var habit: Habit
     
     var body: some View {
         
             HabitDetailsCard(habit: habit)
+        
+        HabitDateCardsView(habit: habit)
+            
     }
 }
 

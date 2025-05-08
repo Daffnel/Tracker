@@ -9,7 +9,7 @@ import SwiftUI
 
 struct HabitDetailsCard: View {
     
-    var habit: Habit
+    @Bindable var habit: Habit
     
     var body: some View {
         ScrollView {
@@ -55,13 +55,18 @@ struct HabitDetailsCard: View {
                     if let completedDates = habit.completedDates {
                         let completedRatio = Double(completedDates.count) / Double(habit.datesInterVal.count)
                         let procent = Int(completedRatio * 100)
-                        
+                    
                         HStack {
                             Label("Avklarat", systemImage: "checkmark.circle.fill")
                                 .foregroundColor(.green)
                             Spacer()
                             Text("\(procent) %")
-                        }
+                            
+                            Button("hepp"){
+                                print(completedDates.count)
+                                print(habit.datesInterVal.count)
+                            }
+                            }
                     }
                     HStack {
                         Label("Status", systemImage: habit.isHabitDone ? "checkmark.seal.fill" : "xmark.seal")
