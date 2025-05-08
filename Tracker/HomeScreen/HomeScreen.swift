@@ -5,36 +5,64 @@
 //  Created by Daniel A on 2025-05-07.
 //
 
-import SwiftUI
 import SwiftData
+import SwiftUI
 
 struct HomeScreen: View {
-    
+
+    //MARK: - Query
     @Query(sort: [SortDescriptor(\Habit.startDate)]) var habits: [Habit]
 
+    //MARK: - Body
     var body: some View {
         NavigationStack {
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
 
-                   
                     HabitStatsCard(habits: habits)
 
-                
-                    Text("Kommande utmaningar")
+                    //MARK: - Kommande aktiviteter
+                    Text("Kommande Aktiviteter")
                         .font(.title2.bold())
                         .padding(.horizontal)
+                        .foregroundColor(.primary)
 
                     ForEach(upcomingHabits(), id: \.self) { habit in
-                        NavigationLink(destination: HabitInfoView(habit: habit)) {
+                        let remaining = habit.progress(habit: habit)
+
+                        NavigationLink(destination: HabitInfoView(habit: habit))
+                        {
                             HStack {
-                                VStack(alignment: .leading) {
+                                VStack(alignment: .leading, spacing: 8) {
                                     Text(habit.name)
                                         .font(.headline)
-                                    Text("Startar \(habit.startDate.formatted(date: .abbreviated, time: .omitted))")
-                                        .font(.subheadline)
-                                        .foregroundColor(.secondary)
+                                        .foregroundColor(.primary)
+
+                                    Text(
+                                        "Startar: \(habit.startDate.formatted(date: .abbreviated, time: .omitted))"
+                                    )
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+
+                                    Text(
+                                        "Avklarat: \(String(format: "%.0f", remaining * 100))%"
+                                    )
+                                    .font(.subheadline)
+                                    .foregroundColor(.secondary)
+
+                                    ProgressView(value: remaining)
+                                        .accentColor(.orange)
+                                        .padding(.top, 4)
                                 }
+                                Spacer()
+                                Label(
+                                    "",
+                                    systemImage: habit.isHabitDone
+                                        ? "checkmark.seal.fill" : "xmark.seal"
+                                )
+                                .foregroundColor(
+                                    habit.isHabitDone ? .green : .red
+                                )
                                 Spacer()
                                 Image(systemName: "chevron.right")
                                     .foregroundColor(.gray)
@@ -42,6 +70,7 @@ struct HomeScreen: View {
                             .padding()
                             .background(Color(.systemGray6))
                             .cornerRadius(12)
+                            .shadow(radius: 5)
                         }
                         .padding(.horizontal)
                     }
@@ -52,9 +81,11 @@ struct HomeScreen: View {
         }
     }
 
+    //MARK: - Helper Methods
+
     func upcomingHabits() -> [Habit] {
         let today = Calendar.current.startOfDay(for: Date())
         return habits.filter { $0.startDate >= today }
-                     .sorted { $0.startDate < $1.startDate }
+            .sorted { $0.startDate < $1.startDate }
     }
 }

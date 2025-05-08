@@ -57,18 +57,20 @@ struct HabitDetailsCard: View {
                         Label("Dagar i rad", systemImage: "flame.fill")
                             .foregroundColor(.orange)
                         Spacer()
-                        Text("\(habit.streak) dagar")
+                        Text("\(habit.calculateStreak(datesInterval: habit.datesInterVal, completedDates: habit.completedDates!)) dagar")
                     }
                     
-                    if let completedDates = habit.completedDates {
+                  /*  if let completedDates = habit.completedDates {
                         let completedRatio = Double(completedDates.count) / Double(habit.datesInterVal.count)
-                        let procent = Int(completedRatio * 100)
+                        let procent = Int(completedRatio * 100)*/
                         
+                    let procent = habit.progress(habit: habit)
                         HStack {
                             Label("Avklarat", systemImage: "checkmark.circle.fill")
                                 .foregroundColor(.green)
                             Spacer()
-                            Text("\(procent) %")
+                            Text("avklarat: \(String(format: "%.0f", procent * 100))%"
+)
                             
                             // Button("hepp"){
                             //    print(completedDates.count)
@@ -94,7 +96,7 @@ struct HabitDetailsCard: View {
         
     }
     
-}
+
 
 #Preview {
    // HabitDetailsCard()

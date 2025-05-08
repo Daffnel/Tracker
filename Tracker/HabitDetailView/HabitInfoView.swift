@@ -16,10 +16,12 @@ struct HabitInfoView: View {
     var body: some View {
         
             HabitDetailsCard(habit: habit)
-        
-        HabitDateCardsView(habit: habit)
             
+            HabitDateCardsView(habit: habit)
+      
+        
     }
+    
 }
 
 #Preview {

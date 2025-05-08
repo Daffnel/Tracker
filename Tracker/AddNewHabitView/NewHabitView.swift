@@ -86,7 +86,7 @@ struct NewHabitView: View {
 
     func saveHabit() {
 
-        let dateInterval = Habit.setDateInteval(
+        let dateInterval = Habit.setDateInterval(
             start: habit.startDate,
             end: habit.endDate,
             interval: habit.interval

@@ -1,0 +1,72 @@
+    @Query(sort: [SortDescriptor(\Habit.startDate)]) var habits: [Habit]
+
+    var body: some View {
+        
+       
+        
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 24) {
+
+                   
+                    HabitStatsCard(habits: habits)
+
+                
+                    Text("Kommande Aktiviteter")
+                        .font(.title2.bold())
+                        .padding(.horizontal)
+
+                    ForEach(upcomingHabits(), id: \.self) { habit in
+                        
+                        let remaining = habit.progress(habit: habit)
+                        
+                        NavigationLink(destination: HabitInfoView(habit: habit)) {
+                            HStack {
+                                VStack(alignment: .leading) {
+                                    Text(habit.name)
+                                        .font(.headline)
+                                    
+                                    Text("Startar \(habit.startDate.formatted(date: .abbreviated, time: .omitted))")
+                                        .font(.subheadline)
+                                        .foregroundColor(.secondary)
+                                    
+                                    Text("Återstår: \(String(format: "%.0f", remaining * 100))%")
+                                        .font(.subheadline)
+                                        .foregroundColor(.secondary)
+                                    ProgressView(value: remaining)
+                                        .accentColor(.orange)
+                                    
+                                }
+                                Spacer()
+                                Label("", systemImage: habit.isHabitDone ? "checkmark.seal.fill" : "xmark.seal")
+                                    .foregroundColor(habit.isHabitDone ? .green : .red)
+                                
+                                
+                                Spacer()
+                                Image(systemName: "chevron.right")
+                                    .foregroundColor(.gray)
+                            
+                                
+                            }
+                            .padding()
+                            .background(Color(.systemGray6))
+                            .cornerRadius(12)
+                            
+                            
+                        }
+                        .padding(.horizontal)
+                    }
+                }
+                .padding(.top)
+            }
+            .navigationTitle("Bli en bättre människa")
+        }
+    }
+
+    func upcomingHabits() -> [Habit] {
+        let today = Calendar.current.startOfDay(for: Date())
+        return habits.filter { $0.startDate >= today }
+                     .sorted { $0.startDate < $1.startDate }
+    }
+}
+

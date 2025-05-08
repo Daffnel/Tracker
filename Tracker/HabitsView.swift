@@ -34,7 +34,7 @@ struct HabitsView: View {
                         }
                     }
                 }
-                .onDelete(perform: deleteDestinations)
+                .onDelete(perform: delete)
             }
             .navigationDestination(for: Habit.self) {habit in
                 HabitInfoView(habit: habit)
@@ -42,7 +42,7 @@ struct HabitsView: View {
             .navigationTitle("Lista med all vanor")
         }
     }
-    func deleteDestinations(_ indexSet: IndexSet) {
+    func delete(_ indexSet: IndexSet) {
         for index in indexSet {
             let habit = habits[index]
             modelContext.delete(habit)

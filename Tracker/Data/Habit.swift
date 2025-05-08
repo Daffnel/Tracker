@@ -57,6 +57,28 @@ class Habit: Identifiable {
         self.category = category
     }
     
+    //TODO något inte rätt med denna fixa!!
+    func calculateStreak(datesInterval: [Date], completedDates: [Date]) -> Int {
+        let calendar = Calendar.current
+        let completed = Set(completedDates.map { calendar.startOfDay(for: $0) })
+        let interval = datesInterval
+            .map { calendar.startOfDay(for: $0) }
+            .sorted(by: >)
+
+        var streak = 0
+
+        for date in interval {
+            if completed.contains(date) {
+                streak += 1
+            } else {
+                break 
+            }
+        }
+
+        return streak
+    }
+    
+    //Update isHabitDone if number of completed dates matches number of dates in interval
     func updateIsHabitDone() {
         if datesInterVal.count == (completedDates?.count ?? 0) {
             isHabitDone = true
@@ -64,14 +86,60 @@ class Habit: Identifiable {
             isHabitDone = false
         }
     }
+    
+    //Calculate and returns the progress in percentage
+    func progress(habit: Habit) -> Double{
+        
+        let total = habit.datesInterVal.count
+        let completed = habit.completedDates?.count ?? 0
+        
+        print(total)
+        print(completed)
+        
+        guard total > 0 else {return 0}
+        
+        return Double(completed) / Double(total)
+    }
 
+    //Skapar all datum i intervalet
+    static func setDateInterval(start: Date, end: Date, interval: HabitInterval) -> [Date] {
+        var dates: [Date] = []
+            var currentDate = start
+            let calendar = Calendar.current
+
+            let step: DateComponents
+
+            switch interval {
+            case .oncePerDay:
+                step = DateComponents(day: 1)
+            case .everyOtherDay:
+                step = DateComponents(day: 2)
+            case .oncePerWeek:
+                step = DateComponents(day: 7)
+            case .oncePerMonth:
+                step = DateComponents(month: 1)
+            case .oncePerYear:
+                step = DateComponents(year: 1)
+            }
+
+            while currentDate <= end {
+                dates.append(currentDate)
+                if let nextDate = calendar.date(byAdding: step, to: currentDate) {
+                    currentDate = nextDate
+                } else {
+                    break
+                }
+            }
+
+            return dates
+    }
 }
 
 enum Category: CaseIterable, Codable, Hashable {
     case health, productivity, relationship, sleep
     case finance, Home, leraning, creativity, noCategory
 
-    //TODO REMOVE AFTER CHECK - osäker om SwiftData accpeterar computed property?
+    
     var categoryName: String {
         switch self {
         case .health:
@@ -118,7 +186,7 @@ enum Category: CaseIterable, Codable, Hashable {
         }
     }
 
-    //TODO add category icons and color
+   
 }
 
 enum HabitInterval: CaseIterable, Hashable, Codable {
